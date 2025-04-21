@@ -1,7 +1,10 @@
 import java.awt.image.BufferedImage;
-import java.awt.Graphics2D;
 import java.util.Random;
 
+/**
+ * GlitchPop applies a recursive glitch effect inspirted by Valorant's GlitchPop series
+ * It manually copies and shrinks patches by pixel manipulation.
+ */
 public class GlitchPop extends Converter {
 
     @Override
@@ -18,29 +21,50 @@ public class GlitchPop extends Converter {
         int w = img.getWidth();
         int h = img.getHeight();
 
+        // Pick random patch
         int pw = (int)(w * patchFrac);
         int ph = (int)(h * patchFrac);
         int x1 = rand.nextInt(w - pw);
         int y1 = rand.nextInt(h - ph);
 
-        BufferedImage patch = img.getSubimage(x1, y1, pw, ph);
+        // Shrink patch manually
+        int newPw = Math.max(1, (int)(pw * shrinkFrac));
+        int newPh = Math.max(1, (int)(ph * shrinkFrac));
 
-        int newPw = (int)(pw * shrinkFrac);
-        int newPh = (int)(ph * shrinkFrac);
         BufferedImage smallPatch = new BufferedImage(newPw, newPh, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = smallPatch.createGraphics();
-        g2d.drawImage(patch, 0, 0, newPw, newPh, null);
-        g2d.dispose();
 
+        for (int sy = 0; sy < newPh; sy++) {
+            for (int sx = 0; sx < newPw; sx++) {
+                int srcX = x1 + (int)((sx / (double)newPw) * pw);
+                int srcY = y1 + (int)((sy / (double)newPh) * ph);
+
+                srcX = Math.min(srcX, w - 1);
+                srcY = Math.min(srcY, h - 1);
+
+                smallPatch.setRGB(sx, sy, img.getRGB(srcX, srcY));
+            }
+        }
+
+        // Pick random new location
         int x2 = rand.nextInt(w - newPw);
         int y2 = rand.nextInt(h - newPh);
 
+        // Copy original into new image
         BufferedImage newCanvas = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = newCanvas.createGraphics();
-        g.drawImage(img, 0, 0, null); // copy original
-        g.drawImage(smallPatch, x2, y2, null); // paste shrunken patch
-        g.dispose();
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                newCanvas.setRGB(x, y, img.getRGB(x, y));
+            }
+        }
 
+        // Paste the small patch
+        for (int sy = 0; sy < newPh; sy++) {
+            for (int sx = 0; sx < newPw; sx++) {
+                newCanvas.setRGB(x2 + sx, y2 + sy, smallPatch.getRGB(sx, sy));
+            }
+        }
+
+        // Recurse
         return glitchPop(newCanvas, depth - 1, patchFrac, shrinkFrac, rand);
     }
 }
