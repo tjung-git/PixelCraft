@@ -1,5 +1,4 @@
 import java.awt.image.BufferedImage;
-import java.awt.Color;
 
 public class Brighten extends Converter {
     private final int INCREMENT = 30;
