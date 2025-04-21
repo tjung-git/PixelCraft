@@ -1,6 +1,8 @@
 **Compile**
 
-`javac -d out *.java converters/*.java `
+```
+javac -d out *.java converters/*.java
+```
 
 **Run converters**
 ```
