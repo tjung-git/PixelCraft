@@ -9,5 +9,5 @@ public abstract class Converter {
         BufferedImage outputImage = applyEffect(inputImage);
         ImageIO.write(outputImage, "PNG", new File(outputFileName));
     }
-    protected abstract BufferedImage applyEffect(BufferedImage inputImage);
+    abstract BufferedImage applyEffect(BufferedImage inputImage);
 }
