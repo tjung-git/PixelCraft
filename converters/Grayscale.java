@@ -1,5 +1,4 @@
 import java.awt.image.BufferedImage;
-import java.awt.Color;
 
 public class Grayscale extends Converter {
     @Override
