@@ -38,7 +38,7 @@ public class PixelCraft {
         } catch (IOException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException | ClassNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
-            e.printStackTrace(); // Uncomment this line for debugging. Comment for production.
+            // e.printStackTrace(); //Uncomment this line for debugging. Comment for production.
         }
     }
 }
