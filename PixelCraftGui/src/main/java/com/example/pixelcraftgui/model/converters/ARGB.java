@@ -1,3 +1,5 @@
+package com.example.pixelcraftgui.model.converters;
+
 public class ARGB {
     public int alpha, red, green, blue;
 
